@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Range
 {
@@ -11,14 +7,13 @@ namespace Range
         public double From { get; private set; }
         public double To { get; private set; }
 
-
         public Range(double from, double to)
         {
             From = from;
             To = to;
         }
 
-        public double GetRange()
+        public double GetLength()
         {
             return To - From;
         }
@@ -28,45 +23,36 @@ namespace Range
             return number >= From && number <= To;
         }
 
-        private bool isCrossing = true;
-        public Range GetCrossingInterval(Range range2)
+        public Range GetIntersection(Range range)
         {
-            if (From < range2.To && To > range2.From)
+            if (From < range.To && To > range.From)
             {
-                double newFrom = Math.Max(From, range2.From);
-                double newTo = Math.Min(To, range2.To);
-
-                return new Range(newFrom, newTo);
+                return new Range(Math.Max(From, range.From), Math.Min(To, range.To));
             }
-
-            isCrossing = false;
 
             return null;
         }
 
-        public Range[] GetCombinedInterval(Range range2)
+        public Range[] GetUnion(Range range)
         {
-            if (From <= range2.To && To >= range2.From)
+            if (From <= range.To && To >= range.From)
             {
-                double newFrom = Math.Min(From, range2.From);
-                double newTo = Math.Max(To, range2.To);
-
-                return new Range[] { new Range(newFrom, newTo) };
+                return new Range[] { new Range(Math.Min(From, range.From), Math.Max(To, range.To)) };
             }
 
-            if (From <= range2.From)
+            if (From <= range.From)
             {
-                return new Range[] { new Range(From, To), new Range(range2.From, range2.To) };
+                return new Range[] { new Range(From, To), new Range(range.From, range.To) };
             }
 
-            return new Range[] { new Range(range2.From, range2.To), new Range(From, To) };
+            return new Range[] { new Range(range.From, range.To), new Range(From, To) };
         }
 
-        public Range[] GetIntervalDifference(Range range2)
+        public Range[] GetDifference(Range range, bool isCrossing)
         {
-            if (range2.From <= From && range2.To >= To) // равны или 2 больше 1
+            if (range.From <= From && range.To >= To) // равны или 2 больше 1
             {
-                return null;
+                return new Range[] { };
             }
 
             if (!isCrossing) // если не пересекаются
@@ -74,22 +60,32 @@ namespace Range
                 return new Range[] { new Range(From, To) };
             }
 
-            if (From < range2.From && To > range2.To) // если второй внутри первого
+            if (From < range.From && To < range.To) // если второй пересекает справа
             {
-                return new Range[] { new Range(From, range2.From - 1), new Range(range2.To + 1, To) };
+                if (To == range.From)
+                {
+                    return new Range[] { new Range(From, To) };
+                }
+
+                return new Range[] { new Range(From, range.From) };
             }
 
-            if (From < range2.From && To < range2.To) // если второй пересекает справа
+            if (From > range.From && To > range.To) // если второй пересекает слева
             {
-                return new Range[] { new Range(From, range2.From - 1) };
+                if (From == range.To)
+                {
+                    return new Range[] { new Range(From, To) };
+                }
+
+                return new Range[] { new Range(range.To, To) };
             }
 
-            if (From > range2.From && To > range2.To) // если второй пересекает слева
-            {
-                return new Range[] { new Range(range2.To + 1, To) };
-            }
+            return new Range[] { new Range(From, range.From), new Range(range.To, To) }; //остается второй внутри первого
+        }
 
-            return new Range[] { new Range(From, range2.From), new Range(range2.To, To) };
+        public override string ToString()
+        {
+            return $"({From}; {To})";
         }
     }
 }

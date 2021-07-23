@@ -21,8 +21,8 @@ namespace Range
             Range range1 = new Range(from1, to1);
             Range range2 = new Range(from2, to2);
 
-            Console.WriteLine($"Длина первого диапазона чисел: {range1.GetRange()}");
-            Console.WriteLine($"Длина второго диапазона чисел: {range2.GetRange()}");
+            Console.WriteLine($"Длина первого диапазона чисел: {range1.GetLength()}");
+            Console.WriteLine($"Длина второго диапазона чисел: {range2.GetLength()}");
 
             Console.Write("Введите число для проверки на пренадлежность к диапазонам: ");
             double number = double.Parse(Console.ReadLine());
@@ -48,7 +48,9 @@ namespace Range
                 Console.WriteLine($"Число {number} НЕ принадлежит к введённому диапазону второго интервала");
             }
 
-            Range crossingRange = range1.GetCrossingInterval(range2);
+            Range crossingRange = range1.GetIntersection(range2);
+
+            bool isCrossing = false;
 
             if (crossingRange == null)
             {
@@ -56,40 +58,38 @@ namespace Range
             }
             else
             {
-                Console.WriteLine($"Интервал пересечения двух интервалов: [{crossingRange.From} : {crossingRange.To}]");
+                isCrossing = true;
+
+                Console.WriteLine($"Интервал пересечения двух интервалов: ({crossingRange.From}; {crossingRange.To})");
             }
 
-            Range[] combinedInterval = range1.GetCombinedInterval(range2);
+            Range[] union = range1.GetUnion(range2);
 
             Console.Write("Объединенный интервал двух интервалов: ");
+            Print(union);
 
-            if (combinedInterval.Length == 1)
-            {
-                Console.WriteLine($"[{combinedInterval[0].From} : {combinedInterval[0].To}]");
-            }
-            else
-            {
-                Console.WriteLine($"[{combinedInterval[0].From} : {combinedInterval[0].To} , {combinedInterval[1].From} : {combinedInterval[1].To}]");
-            }
-
-            Range[] intervalDifference = range1.GetIntervalDifference(range2);
+            Range[] difference = range1.GetDifference(range2, isCrossing);
 
             Console.Write("Разность интервалов: ");
+            Print(difference);
 
-            if (intervalDifference == null)
+            Console.ReadKey();
+        }
+
+        public static void Print(Range[] rangeArray)
+        {
+            if (rangeArray.Length == 0)
             {
-                Console.WriteLine("0");
+                Console.WriteLine("[]");
             }
-            else if (intervalDifference.Length == 1)
+            else if (rangeArray.Length == 1)
             {
-                Console.WriteLine($"[{intervalDifference[0].From} : {intervalDifference[0].To}]");
+                Console.WriteLine($"[{rangeArray[0]}]");
             }
             else
             {
-                Console.WriteLine($"[{intervalDifference[0].From} : {intervalDifference[0].To} , {intervalDifference[1].From} : {intervalDifference[1].To}]");
+                Console.WriteLine($"[{rangeArray[0]}, {rangeArray[1]}]");
             }
-
-            Console.ReadKey();
         }
     }
 }
