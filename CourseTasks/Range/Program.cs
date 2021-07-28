@@ -6,16 +6,16 @@ namespace Range
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Введите начало диапазона первого интервала: ");
+            Console.WriteLine("Введите начало первого диапазона: ");
             double from1 = double.Parse(Console.ReadLine());
 
-            Console.WriteLine("Введите конец диапазона первого интервала: ");
+            Console.WriteLine("Введите конец первого диапазона: ");
             double to1 = double.Parse(Console.ReadLine());
 
-            Console.WriteLine("Введите начало диапазона второго интервала: ");
+            Console.WriteLine("Введите начало второго диапазона: ");
             double from2 = double.Parse(Console.ReadLine());
 
-            Console.WriteLine("Введите конец диапазона второго интервала: ");
+            Console.WriteLine("Введите конец второго диапазона: ");
             double to2 = double.Parse(Console.ReadLine());
 
             Range range1 = new Range(from1, to1);
@@ -32,35 +32,31 @@ namespace Range
 
             if (isNumberInsideRange1)
             {
-                Console.WriteLine($"Число {number} принадлежит к введённому диапазону первого интервала");
+                Console.WriteLine($"Число {number} принадлежит к первому диапазону");
             }
             else
             {
-                Console.WriteLine($"Число {number} НЕ принадлежит к введённому диапазону первого интервала");
+                Console.WriteLine($"Число {number} НЕ принадлежит к первому диапазону");
             }
 
             if (isNumberInsideRange2)
             {
-                Console.WriteLine($"Число {number} принадлежит к введённому диапазону второго интервала");
+                Console.WriteLine($"Число {number} принадлежит ко второму диапазону");
             }
             else
             {
-                Console.WriteLine($"Число {number} НЕ принадлежит к введённому диапазону второго интервала");
+                Console.WriteLine($"Число {number} НЕ принадлежит ко второму диапазону");
             }
 
-            Range crossingRange = range1.GetIntersection(range2);
+            Range intersection = range1.GetIntersection(range2);
 
-            bool isCrossing = false;
-
-            if (crossingRange == null)
+            if (intersection == null)
             {
                 Console.WriteLine("Интервалы не пересакаются!");
             }
             else
             {
-                isCrossing = true;
-
-                Console.WriteLine($"Интервал пересечения двух интервалов: ({crossingRange.From}; {crossingRange.To})");
+                Console.WriteLine($"Интервал пересечения двух интервалов: ({intersection.From}; {intersection.To})");
             }
 
             Range[] union = range1.GetUnion(range2);
@@ -68,7 +64,7 @@ namespace Range
             Console.Write("Объединенный интервал двух интервалов: ");
             Print(union);
 
-            Range[] difference = range1.GetDifference(range2, isCrossing);
+            Range[] difference = range1.GetDifference(range2);
 
             Console.Write("Разность интервалов: ");
             Print(difference);
@@ -76,20 +72,21 @@ namespace Range
             Console.ReadKey();
         }
 
-        public static void Print(Range[] rangeArray)
+        public static void Print(Range[] ranges)
         {
-            if (rangeArray.Length == 0)
+            Console.Write('[');
+
+            for (int i = 0; i < ranges.Length; i++)
             {
-                Console.WriteLine("[]");
+                Console.Write(ranges[i]);
+
+                if (i != ranges.Length - 1)
+                {
+                    Console.Write(", ");
+                }
             }
-            else if (rangeArray.Length == 1)
-            {
-                Console.WriteLine($"[{rangeArray[0]}]");
-            }
-            else
-            {
-                Console.WriteLine($"[{rangeArray[0]}, {rangeArray[1]}]");
-            }
+
+            Console.WriteLine(']');
         }
     }
 }

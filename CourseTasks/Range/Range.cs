@@ -4,8 +4,9 @@ namespace Range
 {
     class Range
     {
-        public double From { get; private set; }
-        public double To { get; private set; }
+        public double From { get; set; }
+
+        public double To { get; set; }
 
         public Range(double from, double to)
         {
@@ -48,19 +49,19 @@ namespace Range
             return new Range[] { new Range(range.From, range.To), new Range(From, To) };
         }
 
-        public Range[] GetDifference(Range range, bool isCrossing)
+        public Range[] GetDifference(Range range)
         {
             if (range.From <= From && range.To >= To) // равны или 2 больше 1
             {
                 return new Range[] { };
             }
 
-            if (!isCrossing) // если не пересекаются
+            if (range.To < From || To < range.From) // если не пересекаются
             {
                 return new Range[] { new Range(From, To) };
             }
 
-            if (From < range.From && To < range.To) // если второй пересекает справа
+            if (From < range.From && To <= range.To) // если второй пересекает справа
             {
                 if (To == range.From)
                 {
@@ -70,7 +71,7 @@ namespace Range
                 return new Range[] { new Range(From, range.From) };
             }
 
-            if (From > range.From && To > range.To) // если второй пересекает слева
+            if (From >= range.From && To > range.To) // если второй пересекает слева
             {
                 if (From == range.To)
                 {
