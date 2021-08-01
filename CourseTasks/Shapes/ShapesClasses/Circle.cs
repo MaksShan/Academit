@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Shapes
+namespace Shapes.ShapesClasses
 {
     class Circle : IShape
     {
-        private double Radius { get; set; }
+        public double Radius { get; set; }
 
         public Circle(double radius)
         {
@@ -33,7 +33,7 @@ namespace Shapes
 
         public override string ToString()
         {
-            return $"круг. Его площадь составляет: {GetArea()}, а периметр {GetPerimeter()}";
+            return $"круг с радиусом: {Radius}. Его площадь составляет: {GetArea()}, а периметр {GetPerimeter()}";
         }
 
         public override bool Equals(object obj)
@@ -43,7 +43,7 @@ namespace Shapes
                 return true;
             }
 
-            if (ReferenceEquals(obj, null) || obj.GetType() != this.GetType())
+            if (ReferenceEquals(obj, null) || obj.GetType() != GetType())
             {
                 return false;
             }

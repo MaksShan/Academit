@@ -1,8 +1,8 @@
-﻿namespace Shapes
+﻿namespace Shapes.ShapesClasses
 {
     class Square : IShape
     {
-        private double SideLength { get; set; }
+        public double SideLength { get; set; }
 
         public Square(double sideLenght)
         {
@@ -13,6 +13,7 @@
         {
             return SideLength;
         }
+
         public double GetHeight()
         {
             return SideLength;
@@ -30,7 +31,7 @@
 
         public override string ToString()
         {
-            return $"квадрат. Его площадь составляет: {GetArea()}, а периметр {GetPerimeter()}";
+            return $"квадрат с длиной стороны: {SideLength}. Его площадь составляет: {GetArea()}, а периметр {GetPerimeter()}";
         }
 
         public override bool Equals(object obj)
@@ -40,7 +41,7 @@
                 return true;
             }
 
-            if (ReferenceEquals(obj, null) || obj.GetType() != this.GetType())
+            if (ReferenceEquals(obj, null) || obj.GetType() != GetType())
             {
                 return false;
             }
