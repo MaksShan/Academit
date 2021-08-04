@@ -33,7 +33,7 @@ namespace Shapes.ShapesClasses
 
         public override string ToString()
         {
-            return $"круг с радиусом: {Radius}. Его площадь составляет: {GetArea()}, а периметр {GetPerimeter()}";
+            return $"Круг с радиусом: {Radius}, площадью {GetArea()} и периметром {GetPerimeter()}";
         }
 
         public override bool Equals(object obj)

@@ -7,10 +7,7 @@ namespace Shapes.Comparators
     {
         public int Compare(IShape shape1, IShape shape2)
         {
-            double area1 = shape1.GetArea();
-            double area2 = shape2.GetArea();
-
-            return area1.CompareTo(area2);
+            return shape1.GetArea().CompareTo(shape2.GetArea());
         }
     }
 }

@@ -42,9 +42,9 @@ namespace Shapes.ShapesClasses
             double bcLength = GetSideLength(X2, Y2, X3, Y3);
             double acLength = GetSideLength(X1, Y1, X3, Y3);
 
-            double halfPerimetr = (abLength + bcLength + acLength) / 2;
+            double halfPerimeter = (abLength + bcLength + acLength) / 2;
 
-            return Math.Sqrt((halfPerimetr - abLength) * (halfPerimetr - acLength) * (halfPerimetr - bcLength) * halfPerimetr);
+            return Math.Sqrt((halfPerimeter - abLength) * (halfPerimeter - acLength) * (halfPerimeter - bcLength) * halfPerimeter);
         }
 
         public double GetPerimeter()
@@ -56,14 +56,14 @@ namespace Shapes.ShapesClasses
             return abLength + bcLength + acLength;
         }
 
-        private double GetSideLength(double X1, double Y1, double X2, double Y2)
+        private static double GetSideLength(double x1, double y1, double x2, double y2)
         {
-            return Math.Sqrt(Math.Pow(X1 - X2, 2) + Math.Pow(Y1 - Y2, 2));
+            return Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
         }
 
         public override string ToString()
         {
-            return $"треугольник с координатами: ({X1}; {Y1}), ({X2}; {Y2}), ({X3}; {Y3}). Его площадь составляет: {GetArea()}, а периметр {GetPerimeter()}";
+            return $"Треугольник с координатами: ({X1}; {Y1}), ({X2}; {Y2}), ({X3}; {Y3}), площадью {GetArea()}, и периметром {GetPerimeter()}";
         }
 
         public override bool Equals(object obj)

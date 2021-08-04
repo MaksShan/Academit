@@ -1,37 +1,40 @@
 ﻿namespace Shapes.ShapesClasses
 {
-    class Square : IShape
+    class Rectangle : IShape
     {
-        public double SideLength { get; set; }
+        public double Width { get; set; }
 
-        public Square(double sideLenght)
+        public double Height { get; set; }
+
+        public Rectangle(double width, double height)
         {
-            SideLength = sideLenght;
+            Width = width;
+            Height = height;
         }
 
         public double GetWidth()
         {
-            return SideLength;
+            return Width;
         }
 
         public double GetHeight()
         {
-            return SideLength;
+            return Height;
         }
 
         public double GetArea()
         {
-            return SideLength * SideLength;
+            return Width * Height;
         }
 
         public double GetPerimeter()
         {
-            return SideLength * 4;
+            return 2 * (Width + Height);
         }
 
         public override string ToString()
         {
-            return $"квадрат с длиной стороны: {SideLength}. Его площадь составляет: {GetArea()}, а периметр {GetPerimeter()}";
+            return $"Прямоугольник с длинами сторон: {Width} и {Height}, площадью {GetArea()} и периметром {GetPerimeter()}";
         }
 
         public override bool Equals(object obj)
@@ -46,9 +49,9 @@
                 return false;
             }
 
-            Square square = (Square)obj;
+            Rectangle rectangle = (Rectangle)obj;
 
-            return SideLength == square.SideLength;
+            return Width == rectangle.Width && Height == rectangle.Height;
         }
 
         public override int GetHashCode()
@@ -56,7 +59,8 @@
             int prime = 37;
             int hash = 1;
 
-            hash = prime * hash + SideLength.GetHashCode();
+            hash = prime * hash + Width.GetHashCode();
+            hash = prime * hash + Height.GetHashCode();
 
             return hash;
         }

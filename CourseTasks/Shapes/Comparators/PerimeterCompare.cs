@@ -7,10 +7,7 @@ namespace Shapes.Comparators
     {
         public int Compare(IShape shape1, IShape shape2)
         {
-            double perimeter1 = shape1.GetPerimeter();
-            double perimeter2 = shape2.GetPerimeter();
-
-            return perimeter1.CompareTo(perimeter2);
+            return shape1.GetPerimeter().CompareTo(shape2.GetPerimeter());
         }
     }
 }
