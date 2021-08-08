@@ -1,39 +1,37 @@
-﻿using System;
-
-namespace Shapes.ShapesClasses
+﻿namespace Shapes.ShapesAreaPerimeter
 {
-    class Circle : IShape
+    class Square : IShape
     {
-        public double Radius { get; set; }
+        public double SideLength { get; set; }
 
-        public Circle(double radius)
+        public Square(double sideLength)
         {
-            Radius = radius;
+            SideLength = sideLength;
         }
 
         public double GetWidth()
         {
-            return Radius * 2;
+            return SideLength;
         }
 
         public double GetHeight()
         {
-            return Radius * 2;
+            return SideLength;
         }
 
         public double GetArea()
         {
-            return Math.PI * Radius * Radius;
+            return SideLength * SideLength;
         }
 
         public double GetPerimeter()
         {
-            return 2 * Math.PI * Radius;
+            return SideLength * 4;
         }
 
         public override string ToString()
         {
-            return $"Круг с радиусом: {Radius}, площадью {GetArea()} и периметром {GetPerimeter()}";
+            return $"Квадрат с длиной стороны: {SideLength}, площадью {GetArea()} и периметром {GetPerimeter()}";
         }
 
         public override bool Equals(object obj)
@@ -48,9 +46,9 @@ namespace Shapes.ShapesClasses
                 return false;
             }
 
-            Circle circle = (Circle)obj;
+            Square square = (Square)obj;
 
-            return Radius == circle.Radius;
+            return SideLength == square.SideLength;
         }
 
         public override int GetHashCode()
@@ -58,7 +56,7 @@ namespace Shapes.ShapesClasses
             int prime = 37;
             int hash = 1;
 
-            hash = prime * hash + Radius.GetHashCode();
+            hash = prime * hash + SideLength.GetHashCode();
 
             return hash;
         }

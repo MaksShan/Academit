@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Shapes.ShapesClasses
+namespace Shapes.ShapesAreaPerimeter
 {
     class Triangle : IShape
     {

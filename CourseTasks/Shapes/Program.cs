@@ -1,5 +1,5 @@
 ﻿using System;
-using Shapes.ShapesClasses;
+using Shapes.ShapesAreaPerimeter;
 using Shapes.Comparators;
 
 namespace Shapes

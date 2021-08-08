@@ -1,4 +1,4 @@
-﻿namespace Shapes.ShapesClasses
+﻿namespace Shapes.ShapesAreaPerimeter
 {
     interface IShape
     {
