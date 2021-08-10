@@ -12,23 +12,32 @@ namespace Vector
             double[] vector2Array = { 3, 0.2, -1, 9 };
             Vector vector2 = new Vector(vector2Array);
 
-            Vector.Check(vector1, vector2);
-
             Console.WriteLine($"Размерность вектора {vector1}: {vector1.GetSize()}");
             Console.WriteLine($"Размерность вектора {vector2}: {vector2.GetSize()}");
 
-            Console.WriteLine("Результат сложения векторов: " + vector1.Multiplication(vector2));
+            vector1.Multiply(vector2);
+            Console.WriteLine("Результат сложения векторов: " + vector1);
 
-            Console.WriteLine("Результат вычитания из результата второй вектор: " + vector1.Subtraction(vector2));
+            vector1.Subtract(vector2);
+            Console.WriteLine("Результат вычитания из результата второй вектор: " + vector1);
 
-            Console.WriteLine($"Результат умножения полученного вектора на скаляр {5}: {vector1.ScalarMultiplication(5)}");
+            vector1.MultiplyByScalar(5);
+            Console.WriteLine($"Результат умножения полученного вектора на скаляр {5}: {vector1}");
 
-            Console.WriteLine($"Разворот вектора: " + vector1.Reversal());
+            vector1.TurnBack();
+            Console.WriteLine($"Разворот вектора: " + vector1);
 
             Console.WriteLine("Длинна вектора: " + vector1.GetLength());
 
-            vector1.GetSet(3);
-            Console.WriteLine($"Вектор после замен компонента по индексу {3}: {vector1}");
+            Console.Write("Введите индекс массива для замены числа: ");
+            int index = int.Parse(Console.ReadLine());
+            Console.WriteLine($"Число под индексом {index}: {vector1.Get(index)}");
+
+            Console.Write("Ведите число для замены: ");
+            double number = double.Parse(Console.ReadLine());
+
+            vector1.Set(index, number);
+            Console.WriteLine($"Вектор после замен компонента по индексу {index}: {vector1}");
 
             if (vector1.Equals(vector2))
             {
@@ -39,9 +48,9 @@ namespace Vector
                 Console.WriteLine("Векторы не равны");
             }
 
-            Console.WriteLine($"Сложение векторов {vector1} и {vector2} с помошью статического метода = {Vector.StaticMultiplication(vector1, vector2)}");
+            Console.WriteLine($"Сложение векторов {vector1} и {vector2} с помошью статического метода: {Vector.Multiply(vector1, vector2)}");
 
-            Console.WriteLine($"Вычитание векторов {vector1} и {vector2} с помошью статического метода = {Vector.StaticSubtraction(vector1, vector2)}");
+            Console.WriteLine($"Вычитание векторов {vector1} и {vector2} с помошью статического метода: {Vector.Subtract(vector1, vector2)}");
 
             Console.WriteLine($"Скалярное произведение векторов {vector1} и {vector2} = {Vector.ScalarProduct(vector1, vector2)}");
 
