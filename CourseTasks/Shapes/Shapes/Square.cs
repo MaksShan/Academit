@@ -1,4 +1,4 @@
-﻿namespace Shapes.ShapesAreaPerimeter
+﻿namespace Shapes.Shapes
 {
     class Square : IShape
     {
