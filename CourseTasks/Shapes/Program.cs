@@ -19,10 +19,10 @@ namespace Shapes
                 new Square(41.4)
             };
 
-            Array.Sort(shapes, new AreaComparer());
+            Array.Sort(shapes, new AreaCompare());
             Console.WriteLine("Фигура с самой большой площадью: " + shapes[shapes.Length - 1]);
 
-            Array.Sort(shapes, new PerimeterComparer());
+            Array.Sort(shapes, new PerimeterCompare());
             Console.WriteLine("Фигура со вторым по величине периметром: " + shapes[shapes.Length - 2]);
 
             Console.ReadKey();
