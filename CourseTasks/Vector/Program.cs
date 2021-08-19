@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vector
+namespace VectorTask
 {
     class Program
     {
@@ -15,7 +15,7 @@ namespace Vector
             Console.WriteLine($"Размерность вектора {vector1}: {vector1.GetSize()}");
             Console.WriteLine($"Размерность вектора {vector2}: {vector2.GetSize()}");
 
-            vector1.Multiply(vector2);
+            vector1.GetAddition(vector2);
             Console.WriteLine("Результат сложения векторов: " + vector1);
 
             vector1.Subtract(vector2);
@@ -48,11 +48,11 @@ namespace Vector
                 Console.WriteLine("Векторы не равны");
             }
 
-            Console.WriteLine($"Сложение векторов {vector1} и {vector2} с помошью статического метода: {Vector.Multiply(vector1, vector2)}");
+            Console.WriteLine($"Сложение векторов {vector1} и {vector2} с помошью статического метода: {Vector.GetAddition(vector1, vector2)}");
 
             Console.WriteLine($"Вычитание векторов {vector1} и {vector2} с помошью статического метода: {Vector.Subtract(vector1, vector2)}");
 
-            Console.WriteLine($"Скалярное произведение векторов {vector1} и {vector2} = {Vector.ScalarProduct(vector1, vector2)}");
+            Console.WriteLine($"Скалярное произведение векторов {vector1} и {vector2} = {Vector.GetScalarProduct(vector1, vector2)}");
 
             Console.ReadKey();
         }

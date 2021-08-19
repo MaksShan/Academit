@@ -1,76 +1,93 @@
 ﻿using System;
 using System.Text;
 
-namespace Vector
+namespace VectorTask
 {
-    class Vector
+    public class Vector
     {
-        private double[] array;
+        private double[] vector;
 
         public Vector(int dimension)
         {
-            array = new double[dimension];
+            if (dimension < 1)
+            {
+                throw new ArgumentException($"Размерность вектора меньше 1: {dimension}");
+            }
 
-            EmptyArrayCheck(array);
+            vector = new double[dimension];
         }
 
         public Vector(Vector vector)
         {
-            array = new double[vector.array.Length];
+            if (vector.vector.Length < 1)
+            {
+                throw new ArgumentException($"Размерность вектора меньше 1: {vector.vector.Length}");
+            }
 
-            EmptyArrayCheck(array);
+            this.vector = new double[vector.vector.Length];
 
-            Array.Copy(vector.array, array, array.Length);
+            Array.Copy(vector.vector, this.vector, this.vector.Length);
         }
 
         public Vector(double[] array)
         {
-            this.array = new double[array.Length];
+            if (array.Length < 1)
+            {
+                throw new ArgumentException($"Невозможно создать вектор, так как размер входного массива меньше 1: {array.Length}");
+            }
 
-            EmptyArrayCheck(this.array);
+            vector = new double[array.Length];
 
-            Array.Copy(array, this.array, this.array.Length);
+            Array.Copy(array, vector, vector.Length);
         }
 
         public Vector(int dimension, double[] array)
         {
-            this.array = new double[dimension];
+            if (array.Length < 1)
+            {
+                throw new ArgumentException($"Невозможно создать вектор, так как размер массива < 0: {array.Length}");
+            }
 
-            EmptyArrayCheck(this.array);
+            if (dimension < 1)
+            {
+                throw new ArgumentException($"Невозможно создать вектор, так как размер вектора должен быть > 0: {dimension}");
+            }
 
-            Array.Copy(array, 0, this.array, 0, array.Length);
+            vector = new double[dimension];
+
+            Array.Copy(array, 0, vector, 0, array.Length);
         }
 
         public int GetSize()
         {
-            return array.Length;
+            return vector.Length;
         }
 
-        public void Multiply(Vector vector)
+        public void GetAddition(Vector vector)
         {
-            Check(this, vector);
+            Check1Vector(this.vector, vector.vector.Length);
 
-            for (int i = 0; i < vector.array.Length; i++)
+            for (int i = 0; i < vector.vector.Length; i++)
             {
-                array[i] += vector.array[i];
+                this.vector[i] += vector.vector[i];
             }
         }
 
         public void Subtract(Vector vector)
         {
-            Check(this, vector);
+            Check1Vector(this.vector, vector.vector.Length);
 
-            for (int i = 0; i < vector.array.Length; i++)
+            for (int i = 0; i < vector.vector.Length; i++)
             {
-                array[i] -= vector.array[i];
+                this.vector[i] -= vector.vector[i];
             }
         }
 
         public void MultiplyByScalar(double scalar)
         {
-            for (int i = 0; i < array.Length; i++)
+            for (int i = 0; i < vector.Length; i++)
             {
-                array[i] *= scalar;
+                vector[i] *= scalar;
             }
         }
 
@@ -83,9 +100,9 @@ namespace Vector
         {
             double squaresSum = 0;
 
-            foreach (int a in array)
+            foreach (double e in vector)
             {
-                squaresSum += a * a;
+                squaresSum += e * e;
             }
 
             return Math.Sqrt(squaresSum);
@@ -93,80 +110,114 @@ namespace Vector
 
         public double Get(int index)
         {
-            return array[index];
+            return vector[index];
         }
 
         public void Set(int index, double number)
         {
-            array[index] = number;
+            vector[index] = number;
         }
 
-        public static Vector Multiply(Vector vector1, Vector vector2)
+        public static Vector GetAddition(Vector vector1, Vector vector2)
         {
-            Check(vector1, vector2);
+            Vector newVector;
 
-            Vector newVector = new Vector(vector1);
+            if (vector1.vector.Length > vector2.vector.Length)
+            {
+                newVector = new Vector(vector1);
 
-            newVector.Multiply(vector2);
+                newVector.GetAddition(vector2);
+
+                return newVector;
+            }
+
+            newVector = new Vector(vector2);
+
+            newVector.GetAddition(vector1);
 
             return newVector;
         }
 
         public static Vector Subtract(Vector vector1, Vector vector2)
         {
-            Check(vector1, vector2);
+            Vector newVector;
 
-            Vector newVector = new Vector(vector1);
+            if (vector1.vector.Length > vector2.vector.Length)
+            {
+                newVector = new Vector(vector1);
 
-            newVector.Subtract(vector2);
+                newVector.Subtract(vector2);
+
+                return newVector;
+            }
+
+            newVector = new Vector(vector2);
+
+            newVector.Subtract(vector1);
 
             return newVector;
         }
 
-        public static double ScalarProduct(Vector vector1, Vector vector2)
+        public static double GetScalarProduct(Vector vector1, Vector vector2)
         {
-            Check(vector1, vector2);
+            Vector newVector;
 
             double scalarProduct = 0;
 
-            for (int i = 0; i < vector1.array.Length; i++)
+            if (vector1.vector.Length > vector2.vector.Length)
             {
-                scalarProduct += vector1.array[i] * vector2.array[i];
+                newVector = new Vector(vector1.vector.Length, vector2.vector);
+
+                for (int i = 0; i < newVector.vector.Length; i++)
+                {
+                    scalarProduct += vector1.vector[i] * newVector.vector[i];
+                }
+            }
+            else
+            {
+                newVector = new Vector(vector2.vector.Length, vector1.vector);
+
+                for (int i = 0; i < newVector.vector.Length; i++)
+                {
+                    scalarProduct += newVector.vector[i] * vector2.vector[i];
+                }
             }
 
             return scalarProduct;
         }
 
-        public static void Check(Vector vector1, Vector vector2)
+        public static void Check1Vector(double[] vector, int dimension)
         {
-            if (vector1.array.Length != vector2.array.Length)
+            if (vector.Length < dimension)
             {
-                if (vector1.array.Length > vector2.array.Length)
-                {
-                    Array.Resize(ref vector2.array, vector1.array.Length);
-                }
-                else
-                {
-                    Array.Resize(ref vector1.array, vector2.array.Length);
-                }
+                Array.Resize(ref vector, dimension);
             }
         }
 
-        private static void EmptyArrayCheck(double[] array)
+        public static void Check2Vectors(Vector vector1, Vector vector2)
         {
-            if (array.Length == 0)
+            if (vector1.vector.Length != vector2.vector.Length)
             {
-                throw new ArgumentException("Размерность одного из векторов = 0");
+                if (vector1.vector.Length > vector2.vector.Length)
+                {
+                    Array.Resize(ref vector2.vector, vector1.vector.Length);
+                }
+                else
+                {
+                    Array.Resize(ref vector1.vector, vector2.vector.Length);
+                }
             }
         }
 
         public override string ToString()
         {
-            StringBuilder outputString = new StringBuilder("{}");
+            StringBuilder stringBuilder = new StringBuilder();
 
-            outputString.Insert(outputString.Length / 2, string.Join(", ", array));
+            stringBuilder.Append('{');
+            stringBuilder.Append(string.Join(", ", vector));
+            stringBuilder.Append('}');
 
-            return outputString.ToString();
+            return stringBuilder.ToString();
         }
 
         public override bool Equals(object obj)
@@ -183,14 +234,14 @@ namespace Vector
 
             Vector vector = (Vector)obj;
 
-            if (array.Length != vector.array.Length)
+            if (this.vector.Length != vector.vector.Length)
             {
                 return false;
             }
 
-            for (int i = 0; i < array.Length; i++)
+            for (int i = 0; i < this.vector.Length; i++)
             {
-                if (array[i] != vector.array[i])
+                if (this.vector[i] != vector.vector[i])
                 {
                     return false;
                 }
@@ -204,9 +255,9 @@ namespace Vector
             int prime = 37;
             int hash = 1;
 
-            foreach (double a in array)
+            foreach (double e in vector)
             {
-                hash = prime * hash + a.GetHashCode();
+                hash = prime * hash + e.GetHashCode();
             }
 
             return hash;
