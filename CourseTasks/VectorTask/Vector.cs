@@ -7,18 +7,6 @@ namespace VectorTask
     {
         private double[] components;
 
-        public double[] Components
-        {
-            get
-            {
-                return components;
-            }
-            set
-            {
-                components = value;
-            }
-        }
-
         public Vector(int dimension)
         {
             if (dimension < 1)
@@ -67,7 +55,7 @@ namespace VectorTask
 
         public void Add(Vector vector)
         {
-            ChangeVectorDimension(components.Length, vector.components.Length);
+            ChangeVectorDimension(vector.components.Length);
 
             for (int i = 0; i < vector.components.Length; i++)
             {
@@ -77,7 +65,7 @@ namespace VectorTask
 
         public void Subtract(Vector vector)
         {
-            ChangeVectorDimension(components.Length, vector.components.Length);
+            ChangeVectorDimension(vector.components.Length);
 
             for (int i = 0; i < vector.components.Length; i++)
             {
@@ -93,7 +81,7 @@ namespace VectorTask
             }
         }
 
-        public void Unfold()
+        public void TurnAround()
         {
             MultiplyByScalar(-1);
         }
@@ -110,61 +98,55 @@ namespace VectorTask
             return Math.Sqrt(squaresSum);
         }
 
-        public double Get(int index)
+        public double this[int index]
         {
-            return components[index];
-        }
-
-        public void Set(int index, double number)
-        {
-            components[index] = number;
+            get
+            {
+                return components[index];
+            }
+            set
+            {
+                components[index] = value;
+            }
         }
 
         public static Vector GetSum(Vector vector1, Vector vector2)
         {
-            Vector newVector = new Vector(vector1); ;
+            Vector result = new Vector(vector1);
 
-            newVector.Add(vector2);
+            result.Add(vector2);
 
-            return newVector;
+            return result;
         }
 
         public static Vector GetDifference(Vector vector1, Vector vector2)
         {
-            Vector newVector = new Vector(vector1);
+            Vector result = new Vector(vector1);
 
-            newVector.Subtract(vector2);
+            result.Subtract(vector2);
 
-            return newVector;
+            return result;
         }
 
         public static double GetScalarProduct(Vector vector1, Vector vector2)
         {
             double scalarProduct = 0;
 
-            if (vector1.components.Length < vector2.components.Length)
+            int smallestVectorLength = vector1.components.Length > vector2.components.Length ? vector2.components.Length : vector1.components.Length;
+
+            for (int i = 0; i < smallestVectorLength; i++)
             {
-                for (int i = 0; i < vector1.components.Length; i++)
-                {
-                    scalarProduct += vector1.components[i] * vector2.components[i];
-                }
-            }
-            else
-            {
-                for (int i = 0; i < vector2.components.Length; i++)
-                {
-                    scalarProduct += vector1.components[i] * vector2.components[i];
-                }
+                scalarProduct += vector1.components[i] * vector2.components[i];
             }
 
             return scalarProduct;
         }
 
-        public void ChangeVectorDimension(int vectorDimension, int targetDimension)
+        private void ChangeVectorDimension(int newDimension)
         {
-            if (vectorDimension < targetDimension)
+            if (components.Length < newDimension)
             {
-                Array.Resize(ref components, targetDimension);
+                Array.Resize(ref components, newDimension);
             }
         }
 

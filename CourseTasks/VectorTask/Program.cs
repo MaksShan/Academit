@@ -24,19 +24,19 @@ namespace VectorTask
             vector1.MultiplyByScalar(5);
             Console.WriteLine($"Результат умножения полученного вектора на скаляр {5}: {vector1}");
 
-            vector1.Unfold();
+            vector1.TurnAround();
             Console.WriteLine("Разворот вектора: " + vector1);
 
             Console.WriteLine("Длинна вектора: " + vector1.GetLength());
 
             Console.Write("Введите индекс массива для замены числа: ");
             int index = int.Parse(Console.ReadLine());
-            Console.WriteLine($"Число под индексом {index}: {vector1.Get(index)}");
+            Console.WriteLine($"Число под индексом {index}: {vector1[index]}");
 
             Console.Write("Ведите число для замены: ");
             double number = double.Parse(Console.ReadLine());
 
-            vector1.Set(index, number);
+            vector1[index] = number;
             Console.WriteLine($"Вектор после замен компонента по индексу {index}: {vector1}");
 
             if (vector1.Equals(vector2))
