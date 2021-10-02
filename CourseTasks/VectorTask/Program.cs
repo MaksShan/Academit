@@ -24,7 +24,7 @@ namespace VectorTask
             vector1.MultiplyByScalar(5);
             Console.WriteLine($"Результат умножения полученного вектора на скаляр {5}: {vector1}");
 
-            vector1.TurnAround();
+            vector1.Reverse();
             Console.WriteLine("Разворот вектора: " + vector1);
 
             Console.WriteLine("Длинна вектора: " + vector1.GetLength());

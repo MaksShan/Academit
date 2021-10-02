@@ -11,7 +11,7 @@ namespace VectorTask
         {
             if (dimension < 1)
             {
-                throw new ArgumentException($"Размерность вектора меньше 1: dimension = {dimension}");
+                throw new ArgumentException($"Размерность вектора меньше 1: dimension = {nameof(dimension)}");
             }
 
             components = new double[dimension];
@@ -28,7 +28,7 @@ namespace VectorTask
         {
             if (array.Length == 0)
             {
-                throw new ArgumentException($"Невозможно создать вектор, так как размер входного массива меньше 1: array.Length = {array.Length}");
+                throw new ArgumentException($"Невозможно создать вектор, так как размер входного массива меньше 1: array.Length = {nameof(array.Length)}");
             }
 
             components = new double[array.Length];
@@ -40,7 +40,7 @@ namespace VectorTask
         {
             if (dimension < 1)
             {
-                throw new ArgumentException($"Невозможно создать вектор, так как размер вектора должен быть > 0: dimension = {dimension}");
+                throw new ArgumentException($"Невозможно создать вектор, так как размер вектора должен быть > 0: dimension = {nameof(dimension)}");
             }
 
             components = new double[dimension];
@@ -55,7 +55,7 @@ namespace VectorTask
 
         public void Add(Vector vector)
         {
-            ChangeVectorDimension(vector.components.Length);
+            increaseDimension(vector.components.Length);
 
             for (int i = 0; i < vector.components.Length; i++)
             {
@@ -65,7 +65,7 @@ namespace VectorTask
 
         public void Subtract(Vector vector)
         {
-            ChangeVectorDimension(vector.components.Length);
+            increaseDimension(vector.components.Length);
 
             for (int i = 0; i < vector.components.Length; i++)
             {
@@ -81,7 +81,7 @@ namespace VectorTask
             }
         }
 
-        public void TurnAround()
+        public void Reverse()
         {
             MultiplyByScalar(-1);
         }
@@ -132,9 +132,9 @@ namespace VectorTask
         {
             double scalarProduct = 0;
 
-            int smallestVectorLength = vector1.components.Length > vector2.components.Length ? vector2.components.Length : vector1.components.Length;
+            int minArrayLength = Math.Min(vector1.components.Length, vector2.components.Length);
 
-            for (int i = 0; i < smallestVectorLength; i++)
+            for (int i = 0; i < minArrayLength; i++)
             {
                 scalarProduct += vector1.components[i] * vector2.components[i];
             }
@@ -142,11 +142,11 @@ namespace VectorTask
             return scalarProduct;
         }
 
-        private void ChangeVectorDimension(int newDimension)
+        private void increaseDimension(int Dimension)
         {
-            if (components.Length < newDimension)
+            if (components.Length < Dimension)
             {
-                Array.Resize(ref components, newDimension);
+                Array.Resize(ref components, Dimension);
             }
         }
 
