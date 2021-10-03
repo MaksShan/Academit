@@ -8,35 +8,45 @@ namespace ArrayListHome
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Текст из файла файла: ");
+            try
+            {
+                List<string> fileLines = ReadLinesFromFile("..\\..\\..\\Data.txt");
 
-            List<string> dataFromFile = ReadFileData("..\\..\\..\\Data.txt");
+                foreach (string l in fileLines)
+                {
+                    Console.WriteLine(l);
+                }
+            }
+            catch (IOException)
+            {
+                Console.WriteLine("Не удалось открыть файл");
+            }
 
-            Console.WriteLine(string.Join('\n', dataFromFile));
+            List<int> numbers = new List<int> { -1, -2, -4, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
-            List<int> numbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            Console.WriteLine();
+            Console.WriteLine($"Исходный список целых чисел: {string.Join(", ", numbers)}");
 
-            Console.WriteLine($"\nИсходный список целых чисел: {string.Join(", ", numbers)}");
-
-            RemoveEvenNunbers(numbers);
-
+            RemoveEvenNumbers(numbers);
             Console.WriteLine($"Список целых чисел после удаления четных: {string.Join(", ", numbers)}");
 
             List<int> repeatableNumbers = new List<int> { 1, 5, 2, 1, 3, 5 };
 
-            Console.WriteLine($"\nИсходный список целых чисел: {string.Join(", ", repeatableNumbers)}");
+            Console.WriteLine();
+            Console.WriteLine($"Исходный список целых чисел: {string.Join(", ", repeatableNumbers)}");
 
             List<int> uniqueNumbers = GetListWithoutRepeats(repeatableNumbers);
-
             Console.WriteLine($"Список целых чисел без повторений: {string.Join(", ", uniqueNumbers)}");
 
             Console.ReadKey();
         }
 
-        private static List<string> ReadFileData(string filePath)
+        private static List<string> ReadLinesFromFile(string filePath)
         {
-            using (StreamReader reader = new StreamReader(filePath))
+            try
             {
+                using StreamReader reader = new StreamReader(filePath);
+
                 List<string> lines = new List<string>();
 
                 string currentLine;
@@ -48,52 +58,37 @@ namespace ArrayListHome
 
                 return lines;
             }
+            catch
+            {
+                throw new IOException();
+            }
         }
 
-        private static void RemoveEvenNunbers(List<int> numbers)
+        private static void RemoveEvenNumbers(List<int> numbers)
         {
             for (int i = 0; i < numbers.Count; i++)
             {
-                if (numbers[i] % 2 == 0)
+                if ((numbers[i]) % 2 == 0)
                 {
                     numbers.RemoveAt(i);
+
+                    i--;
                 }
             }
         }
 
         private static List<int> GetListWithoutRepeats(List<int> numbersList)
         {
-            List<int> uniqueNumbers = new List<int>();
+            List<int> uniqueNumbers = new List<int>(10);
 
-            if (numbersList.Count > 1)
+            for (int i = 0; i < numbersList.Count; i++)
             {
-                for (int i = numbersList.Count - 1; i > 0; --i)
+                if (uniqueNumbers.Contains(numbersList[i]))
                 {
-                    bool isRepeats = false;
-
-                    for (int j = i - 1; j >= 0; --j)
-                    {
-                        if (numbersList[i] == numbersList[j])
-                        {
-                            isRepeats = true;
-
-                            break;
-                        }
-                    }
-
-                    if (isRepeats == false)
-                    {
-                        uniqueNumbers.Add(numbersList[i]);
-                    }
+                    continue;
                 }
 
-                uniqueNumbers.Add(numbersList[0]);
-
-                uniqueNumbers.Reverse();
-            }
-            else
-            {
-                uniqueNumbers.AddRange(numbersList);
+                uniqueNumbers.Add(numbersList[i]);
             }
 
             return uniqueNumbers;
