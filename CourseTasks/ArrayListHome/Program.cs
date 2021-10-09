@@ -8,18 +8,11 @@ namespace ArrayListHome
     {
         static void Main(string[] args)
         {
-            try
-            {
-                List<string> fileLines = ReadLinesFromFile("..\\..\\..\\Data.txt");
+            List<string> fileLines = GetLinesFromFile("..\\..\\..\\Data.txt");
 
-                foreach (string l in fileLines)
-                {
-                    Console.WriteLine(l);
-                }
-            }
-            catch (IOException)
+            foreach (string f in fileLines)
             {
-                Console.WriteLine("Не удалось открыть файл");
+                Console.WriteLine(f);
             }
 
             List<int> numbers = new List<int> { -1, -2, -4, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
@@ -41,13 +34,17 @@ namespace ArrayListHome
             Console.ReadKey();
         }
 
-        private static List<string> ReadLinesFromFile(string filePath)
+        private static List<string> GetLinesFromFile(string filePath)
         {
-            try
+            List<string> lines = new List<string>();
+
+            if (!TryOpen(filePath))
+            {
+                Console.WriteLine("Не удалось открыть файл");
+            }
+            else
             {
                 using StreamReader reader = new StreamReader(filePath);
-
-                List<string> lines = new List<string>();
 
                 string currentLine;
 
@@ -55,20 +52,16 @@ namespace ArrayListHome
                 {
                     lines.Add(currentLine);
                 }
+            }
 
-                return lines;
-            }
-            catch
-            {
-                throw new IOException();
-            }
+            return lines;
         }
 
         private static void RemoveEvenNumbers(List<int> numbers)
         {
             for (int i = 0; i < numbers.Count; i++)
             {
-                if ((numbers[i]) % 2 == 0)
+                if (numbers[i] % 2 == 0)
                 {
                     numbers.RemoveAt(i);
 
@@ -77,21 +70,33 @@ namespace ArrayListHome
             }
         }
 
-        private static List<int> GetListWithoutRepeats(List<int> numbersList)
+        private static List<int> GetListWithoutRepeats(List<int> numbers)
         {
-            List<int> uniqueNumbers = new List<int>(10);
+            List<int> uniqueNumbers = new List<int>(30);
 
-            for (int i = 0; i < numbersList.Count; i++)
+            foreach (int n in numbers)
             {
-                if (uniqueNumbers.Contains(numbersList[i]))
+                if (!uniqueNumbers.Contains(n))
                 {
-                    continue;
+                    uniqueNumbers.Add(n);
                 }
-
-                uniqueNumbers.Add(numbersList[i]);
             }
 
             return uniqueNumbers;
+        }
+
+        private static bool TryOpen(string filePath)
+        {
+            try
+            {
+                using StreamReader reader = new StreamReader(filePath);
+
+                return true;
+            }
+            catch (FileNotFoundException)
+            {
+                return false;
+            }
         }
     }
 }
