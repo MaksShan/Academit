@@ -11,7 +11,7 @@ namespace VectorTask
         {
             if (dimension < 1)
             {
-                throw new ArgumentException($"Размерность вектора меньше 1: dimension = {nameof(dimension)}");
+                throw new ArgumentException($"Размерность вектора меньше 1: {nameof(dimension)} = {dimension}");
             }
 
             components = new double[dimension];
@@ -28,7 +28,7 @@ namespace VectorTask
         {
             if (array.Length == 0)
             {
-                throw new ArgumentException($"Невозможно создать вектор, так как размер входного массива меньше 1: array.Length = {nameof(array.Length)}");
+                throw new ArgumentException($"Невозможно создать вектор, так как размер входного массива меньше 1: {nameof(array.Length)} = {array.Length}");
             }
 
             components = new double[array.Length];
@@ -40,7 +40,7 @@ namespace VectorTask
         {
             if (dimension < 1)
             {
-                throw new ArgumentException($"Невозможно создать вектор, так как размер вектора должен быть > 0: dimension = {nameof(dimension)}");
+                throw new ArgumentException($"Невозможно создать вектор, так как размер вектора должен быть > 0: {nameof(dimension)} = {dimension}");
             }
 
             components = new double[dimension];
@@ -55,7 +55,7 @@ namespace VectorTask
 
         public void Add(Vector vector)
         {
-            increaseDimension(vector.components.Length);
+            IncreaseDimension(vector.components.Length);
 
             for (int i = 0; i < vector.components.Length; i++)
             {
@@ -65,7 +65,7 @@ namespace VectorTask
 
         public void Subtract(Vector vector)
         {
-            increaseDimension(vector.components.Length);
+            IncreaseDimension(vector.components.Length);
 
             for (int i = 0; i < vector.components.Length; i++)
             {
@@ -142,11 +142,11 @@ namespace VectorTask
             return scalarProduct;
         }
 
-        private void increaseDimension(int Dimension)
+        private void IncreaseDimension(int dimension)
         {
-            if (components.Length < Dimension)
+            if (components.Length < dimension)
             {
-                Array.Resize(ref components, Dimension);
+                Array.Resize(ref components, dimension);
             }
         }
 
