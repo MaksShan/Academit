@@ -7,7 +7,7 @@ namespace HashTableTask
     {
         static void Main(string[] args)
         {
-            HashTable table = new HashTable(100);
+            HashTable<string> table = new HashTable<string>(100);
 
             using (StreamReader reader = new StreamReader("..\\..\\..\\Countries.txt"))
             {
@@ -15,22 +15,49 @@ namespace HashTableTask
 
                 while ((currentLine = reader.ReadLine()) != null)
                 {
-                    table.SetItem(currentLine);
+                    table.Add(currentLine);
                 }
             }
 
             string searchItem = "Benin";
 
-            if (table.GetItemIndex(searchItem) == -1)
+            if (table.Contains(searchItem))
             {
-                Console.WriteLine($"Элемента \"{searchItem}\" не существует");
+                Console.WriteLine($"Элемента \"{searchItem}\" хранится в списке");
             }
             else
             {
-                Console.WriteLine($"Хэш-код элемента \"{searchItem}\" = {table.GetListIndex(searchItem)}, его индекс в листе: {table.GetItemIndex(searchItem)}");
-
-                Console.WriteLine(table.RemoveItem(searchItem));
+                Console.WriteLine($"Элемент \"{searchItem}\" в списке отсутствует");
             }
+
+            if (table.Remove(searchItem))
+            {
+                Console.WriteLine("Элемент был успешно удален");
+            }
+            else
+            {
+                Console.WriteLine("Не удалось удалить жэлемент");
+            }
+
+            string[] countries = new string[20];
+
+            table.CopyTo(countries, 10);
+
+            Console.Write($"В таблице под индексом {10} хранятся следующие элементы: ");
+
+            for (int i = 0; i < countries.Length && countries[i] != null; i++)
+            {
+                Console.Write(countries[i]);
+
+                if (countries[i + 1] == null)
+                {
+                    break;
+                }
+
+                Console.Write(", ");
+            }
+
+            table.Clear();
 
             Console.ReadKey();
         }
