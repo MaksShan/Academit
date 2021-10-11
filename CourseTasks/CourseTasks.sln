@@ -15,9 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArrayListHome", "ArrayListH
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HashTableTask", "HashTableTask\HashTableTask.csproj", "{200DEA01-5904-477E-AA74-0D312B4EBA7D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListTask", "ListTask\ListTask.csproj", "{5838EE7C-18BE-4260-B6D4-97750A422C49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArrayListTask", "ListTask\ArrayListTask.csproj", "{5838EE7C-18BE-4260-B6D4-97750A422C49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "List", "List\List.csproj", "{075809C5-ADAD-4785-802B-66BE94C1983C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "List", "List\List.csproj", "{075809C5-ADAD-4785-802B-66BE94C1983C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

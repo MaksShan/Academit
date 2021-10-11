@@ -1,129 +1,145 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 
 namespace ListTask
 {
-    public class MyList<T> : IList<T>, IEnumerable<T>
+    class MyList<T> : IList<T>
     {
-        private T[] items = new T[10];
-        private int length;
-
-        public int Count
+        private T[] items;
+        private int modCount;
+        public int Count { get; private set; }
+        public int Capacity
         {
-            get { return length; }
+            get
+            {
+                return items.Length;
+            }
+            set
+            {
+                Array.Resize(ref items, value);
+            }
+        }
+
+        public MyList()
+        {
+            items = new T[10];
+        }
+
+        public MyList(int capacity)
+        {
+            items = new T[capacity];
         }
 
         public T this[int index]
         {
             get
             {
-                if (index > length - 1 || index < 0)
+                if (index < 0 || index >= Count - 1)
                 {
-                    throw new ArgumentOutOfRangeException($"Индекс должен быть больше 0 и меньше {length - 1}, {nameof(index)}");
+                    throw new ArgumentOutOfRangeException($"Индекс должен быть больше 0 и меньше {Count - 1}, {nameof(index)} = {index}");
                 }
 
                 return items[index];
             }
             set
             {
-                if (index > length - 1 || index < 0)
+                if (index < 0 || index >= Count)
                 {
-                    throw new ArgumentOutOfRangeException($"Индекс должен быть больше 0 и меньше {length - 1}, {nameof(index)}");
+                    throw new ArgumentOutOfRangeException($"Индекс должен быть больше 0 и меньше {Count - 1}, {nameof(index)} = {index}");
                 }
 
                 items[index] = value;
             }
         }
 
-        public void Add(T obj)
+        public void Add(T element)
         {
-            if (length >= items.Length)
-            {
-                IncreaseCapacity();
-            }
-
-            items[length] = obj;
-
-            ++length;
+            Insert(Count, element);
         }
 
         private void IncreaseCapacity()
         {
-            T[] old = items;
-
-            items = new T[old.Length * 2];
-
-            Array.Copy(old, 0, items, 0, old.Length);
+            Array.Resize(ref items, (items.Length + 1) * 2);
         }
 
         public void RemoveAt(int index)
         {
-            if (index > length || index < 0)
+            if (index > Count - 1 || index < 0)
             {
-                throw new IndexOutOfRangeException($"Индекс ({index}) должен быть больше 0 и меньше {length - 1}, {nameof(index)}");
-            }
-            if (index < length - 1)
-            {
-                Array.Copy(items, index + 1, items, index, length - index - 1);
+                throw new IndexOutOfRangeException($"Индекс ({index}) должен быть больше 0 и меньше {Count - 1}, {nameof(index)} = {index}");
             }
 
-            --length;
+            Array.Copy(items, index + 1, items, index, Count - index - 1);
+
+            items[Count - 1] = default(T);
+
+            --Count;
+            ++modCount;
         }
 
-        public void Insert(int index, T obj)
+        public void Insert(int index, T element)
         {
-            if (index > length || index < 0)
+            if (index > Count || index < 0)
             {
-                throw new IndexOutOfRangeException($"Индекс ({index}) должен быть больше 0 и меньше {length - 1}, {nameof(index)}");
+                throw new IndexOutOfRangeException($"Индекс ({index}) должен быть больше 0 и меньше {Count - 1}, {nameof(index)} = {index}");
             }
 
-            if (index < length - 1)
+            if (Count >= items.Length)
             {
-                if (length >= items.Length)
-                {
-                    IncreaseCapacity();
-                }
-
-                Array.Copy(items, index, items, index + 1, length - index);
-
-                items[index] = obj;
+                IncreaseCapacity();
             }
 
-            ++length;
+            Array.Copy(items, index, items, index + 1, Count - index);
+
+            items[index] = element;
+
+            ++Count;
+            ++modCount;
         }
 
         public void Clear()
         {
-            length = 0;
-        }
-
-        public bool Contains(T obj)
-        {
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < Count; i++)
             {
-                if (items[i].Equals(obj))
-                {
-                    return true;
-                }
+                items[i] = default(T);
             }
 
-            return false;
+            Count = 0;
+
+            modCount++;
+        }
+
+        public bool Contains(T element)
+        {
+            if (IndexOf(element) == -1)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public void CopyTo(T[] array, int index)
         {
-            for (int i = 0; i < length; i++)
+            if (Count > array.Length - index)
             {
-                array.SetValue(items[i], index++);
+                throw new IndexOutOfRangeException($"Размер массива {nameof(array.Length)} = {array.Length} должен быть больше {Count + index}");
             }
+
+            Array.Copy(items, 0, array, index, Count);
         }
 
-        public int IndexOf(T obj)
+        public int IndexOf(T element)
         {
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < Count; i++)
             {
-                if (items[i].Equals(obj))
+                if (items[i] == null && element == null)
+                {
+                    return i;
+                }
+                else if (items[i].Equals(element))
                 {
                     return i;
                 }
@@ -132,27 +148,26 @@ namespace ListTask
             return -1;
         }
 
-        public bool Remove(T obj)
+        public bool Remove(T element)
         {
-            try
-            {
-                RemoveAt(IndexOf(obj));
+            int oldCount = Count;
 
-                return true;
-            }
-            catch (Exception)
+            RemoveAt(IndexOf(element));
+
+            if (oldCount == Count)
             {
                 return false;
             }
+
+            return true;
         }
 
-        public bool IsReadOnly
+        public void TrimExpress()
         {
-            get
-            {
-                return false;
-            }
+            Capacity = Count;
         }
+
+        public bool IsReadOnly => false;
 
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -161,10 +176,34 @@ namespace ListTask
 
         public IEnumerator<T> GetEnumerator()
         {
-            for (int i = 0; i < length; i++)
+            int mods = modCount;
+
+            for (int i = 0; i < Count; i++)
             {
+                if (mods != modCount)
+                {
+                    throw new InvalidOperationException("Коллекция была изменена во вресмя обхода");
+                }
+
                 yield return items[i];
             }
+        }
+
+        public override string ToString()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (int i = 0; i < Count; i++)
+            {
+                stringBuilder.Append(items[i]);
+
+                if (i+1!=Count)
+                {
+                    stringBuilder.Append(", ");
+                }
+            }
+
+            return stringBuilder.ToString();
         }
     }
 }
