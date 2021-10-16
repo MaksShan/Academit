@@ -10,9 +10,9 @@ namespace ArrayListHome
         {
             List<string> fileLines = GetLinesFromFile("..\\..\\..\\Data.txt");
 
-            foreach (string f in fileLines)
+            foreach (string line in fileLines)
             {
-                Console.WriteLine(f);
+                Console.WriteLine(line);
             }
 
             List<int> numbers = new List<int> { -1, -2, -4, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
@@ -38,11 +38,7 @@ namespace ArrayListHome
         {
             List<string> lines = new List<string>();
 
-            if (!TryOpen(filePath))
-            {
-                Console.WriteLine("Не удалось открыть файл");
-            }
-            else
+            try
             {
                 using StreamReader reader = new StreamReader(filePath);
 
@@ -52,6 +48,12 @@ namespace ArrayListHome
                 {
                     lines.Add(currentLine);
                 }
+
+                return lines;
+            }
+            catch (IOException) // покрывает и FileNotFoundException
+            {
+                Console.WriteLine("Не удалось открыть файл!");
             }
 
             return lines;
@@ -72,31 +74,17 @@ namespace ArrayListHome
 
         private static List<int> GetListWithoutRepeats(List<int> numbers)
         {
-            List<int> uniqueNumbers = new List<int>(30);
+            List<int> uniqueNumbers = new List<int>(numbers.Count);
 
-            foreach (int n in numbers)
+            foreach (int number in numbers)
             {
-                if (!uniqueNumbers.Contains(n))
+                if (!uniqueNumbers.Contains(number))
                 {
-                    uniqueNumbers.Add(n);
+                    uniqueNumbers.Add(number);
                 }
             }
 
             return uniqueNumbers;
-        }
-
-        private static bool TryOpen(string filePath)
-        {
-            try
-            {
-                using StreamReader reader = new StreamReader(filePath);
-
-                return true;
-            }
-            catch (FileNotFoundException)
-            {
-                return false;
-            }
         }
     }
 }
