@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArrayListTask", "ArrayListT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TreeTask", "TreeTask\TreeTask.csproj", "{E9A33B2A-2292-4AE1-80F4-F2F7F8D67CC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lambda", "Lambda\Lambda.csproj", "{B67B5842-D630-4D6C-8C32-5351DF3B179C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lambda", "Lambda\Lambda.csproj", "{B67B5842-D630-4D6C-8C32-5351DF3B179C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temperature", "Temperature\Temperature.csproj", "{A328F7CE-498D-4158-8CD0-4798EC5F5871}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{B67B5842-D630-4D6C-8C32-5351DF3B179C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B67B5842-D630-4D6C-8C32-5351DF3B179C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B67B5842-D630-4D6C-8C32-5351DF3B179C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A328F7CE-498D-4158-8CD0-4798EC5F5871}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A328F7CE-498D-4158-8CD0-4798EC5F5871}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A328F7CE-498D-4158-8CD0-4798EC5F5871}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A328F7CE-498D-4158-8CD0-4798EC5F5871}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
