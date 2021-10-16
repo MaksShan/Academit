@@ -11,7 +11,7 @@ namespace VectorTask
         {
             if (dimension < 1)
             {
-                throw new ArgumentException($"Размерность вектора меньше 1: {nameof(dimension)} = {dimension}");
+                throw new ArgumentException($"Размерность вектора меньше 1: {dimension}", nameof(dimension));
             }
 
             components = new double[dimension];
@@ -28,7 +28,7 @@ namespace VectorTask
         {
             if (array.Length == 0)
             {
-                throw new ArgumentException($"Невозможно создать вектор, так как размер входного массива меньше 1: {nameof(array.Length)} = {array.Length}");
+                throw new ArgumentException($"Невозможно создать вектор, так как размер входного массива меньше 1: {array.Length}", nameof(array.Length));
             }
 
             components = new double[array.Length];
@@ -40,7 +40,7 @@ namespace VectorTask
         {
             if (dimension < 1)
             {
-                throw new ArgumentException($"Невозможно создать вектор, так как размер вектора должен быть > 0: {nameof(dimension)} = {dimension}");
+                throw new ArgumentException($"Размерность вектора меньше 1: {dimension}", nameof(dimension));
             }
 
             components = new double[dimension];
