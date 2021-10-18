@@ -1,168 +1,148 @@
 ﻿using System;
+using System.Text;
 
 namespace List
 {
     class SinglyLinkedList<T>
     {
-        private int count;
         private Node<T> head;
 
-        public SinglyLinkedList()
-        {
-            head = null;
-            count = 0;
-        }
+        public int Count { get; private set; } //автосвойство размера списка
 
-        public int GetLength() // получить размер списка
+        public T GetFirst() //получение значения первого элемента
         {
-            return count;
-        }
+            if (head == null)
+            {
+                throw new NullReferenceException("Список пуст");
+            }
 
-        public T GetFirstElement() //получение значения первого элемента
-        {
             return head.Data;
         }
 
-        public T GetElement(int index) // получение элемента по индексу
+        private void CheckIndex(int index)
         {
-            Node<T> current = head;
-
-            int elementCounter = 0;
-
-            while (current != null)
+            if (index > Count - 1 || index < 0)
             {
-                if (elementCounter == index)
-                {
-                    return current.Data;
-                }
-
-                elementCounter++;
-                current = current.Next;
+                throw new ArgumentOutOfRangeException(nameof(index), $"Индекс ({index}) находится вне длины списка {Count}");
             }
-
-            throw new ArgumentOutOfRangeException("Индекс находится вне длины списка");
         }
 
-        public T ChangeElement(int index, T data) // изменение элемента по индексу
+        private Node<T> GetNode(int index) // поиск необходимого узла
         {
-            T previousData;
+            CheckIndex(index);
 
             Node<T> current = head;
 
-            int elementCounter = 0;
-
-            while (current != null)
+            for (int i = 0; current != null; i++)
             {
-                if (elementCounter == index)
+                if (i == index)
                 {
-                    previousData = current.Data;
-
-                    current.Data = data;
-
-                    return previousData;
+                    break;
                 }
 
-                elementCounter++;
                 current = current.Next;
             }
 
-            throw new ArgumentOutOfRangeException("Индекс находится вне длины списка");
+            return current;
+        }
+
+        private Node<T> GetNode(int index, Node<T> startNode) // Для Insert, RemoveByIndex
+        {
+            CheckIndex(index);
+
+            Node<T> current = startNode;
+
+            for (int i = 1; current.Next != null; i++)
+            {
+                if (i == index)
+                {
+                    break;
+                }
+
+                current = current.Next;
+            }
+
+            return current;
+        }
+
+        public T GetData(int index) // получение элемента по индексу
+        {
+            Node<T> node = GetNode(index);
+
+            return node.Data;
+        }
+
+        public T SetData(int index, T data) // изменение элемента по индексу
+        {
+            T oldData;
+
+            Node<T> node = GetNode(index);
+
+            oldData = node.Data;
+
+            node.Data = data;
+
+            return oldData;
         }
 
         public void AddFirst(T data) // вставка элемента в начало
         {
-            Node<T> node = new Node<T>(data);
+            head = new Node<T>(data, head);
 
-            node.Next = head;
-            head = node;
-
-            count++;
+            Count++;
         }
 
-        public T Remove(int index) // удаление элемента по индексу
+        public T RemoveByIndex(int index) // удаление элемента по индексу
         {
-            if (head == null)
+            CheckIndex(index);
+
+            T deletedData;
+
+            if (index == 0) // если индекс 0 то сдвигаем head
             {
-                throw new NullReferenceException("Список пуст");
+                deletedData = RemoveFirst();
+
+                return deletedData;
             }
 
             Node<T> current = head;
 
-            T oldData;
+            current = GetNode(index, current); // 1 так как при 0 уже проверили
 
-            if (index == 0) // если индекс 0 то сдвигаем head
-            {
-                oldData = current.Data;
+            deletedData = current.Next.Data;
 
-                head = current.Next;
+            current.Next = current.Next.Next;
 
-                return oldData;
-            }
+            Count--;
 
-            int elementCounter = 1; // так как при 0 уже проверили
-
-            while (current.Next != null)
-            {
-                if (elementCounter == index)
-                {
-                    oldData = current.Next.Data;
-
-                    current.Next = current.Next.Next;
-
-                    count--;
-
-                    return oldData;
-                }
-
-                current = current.Next;
-
-                elementCounter++;
-            }
-
-            throw new ArgumentOutOfRangeException("Индекс находится вне длины списка");
+            return deletedData;
         }
 
-        public void Insert(Node<T> data, int index) // вставка элемента по индексу
+        public void Insert(int index, T data) // вставка элемента по индексу
         {
             if (index == 0)
             {
-                AddFirst(data.Data);
+                AddFirst(data);
 
                 return;
             }
 
-            Node<T> current = head;
+            Node<T> current = GetNode(index, head);
 
-            int elementCounter = 1;
+            Node<T> insertedNode = new Node<T>(data);
 
-            while (current.Next != null)
-            {
-                if (elementCounter == index)
-                {
-                    data.Next = current.Next;
-                    current.Next = data;
+            insertedNode.Next = current.Next;
 
-                    count++;
+            current.Next = insertedNode;
 
-                    return;
-                }
+            Count++;
 
-                current = current.Next;
-
-                elementCounter++;
-            }
-
-            throw new ArgumentOutOfRangeException("Индекс находится вне длины списка");
+            return;
         }
 
-        public bool RemoveItem(T item) // удаление узла по значению
+        public bool RemoveData(T data) // удаление узла по значению
         {
-            if (head == null)
-            {
-                throw new NullReferenceException("Список пуст");
-            }
-
-            if (head.Data.Equals(item))
+            if (head != null && head.Data.Equals(data))
             {
                 RemoveFirst();
 
@@ -173,11 +153,11 @@ namespace List
 
             while (current != null)
             {
-                if (current.Next.Data.Equals(item))
+                if (current.Next.Data != null && current.Next.Data.Equals(data))
                 {
                     current.Next = current.Next.Next;
 
-                    count--;
+                    Count--;
 
                     return true;
                 }
@@ -188,24 +168,23 @@ namespace List
             return false;
         }
 
-        public T RemoveFirst() // удаление первого хлемента
+        public T RemoveFirst() // удаление первого элемента
         {
-            T deletedData = GetFirstElement();
+            T removedData = head.Data;
 
-            Remove(0);
+            head = head.Next;
 
-            return deletedData;
+            return removedData;
         }
 
-        public void Reverse() // разворот списка за линейнное время
+        public void Reverse() // разворот списка за линейное время
         {
             Node<T> previous = null;
             Node<T> current = head;
-            Node<T> next = null;
 
             while (current != null)
             {
-                next = current.Next;
+                Node<T> next = current.Next;
                 current.Next = previous;
                 previous = current;
                 current = next;
@@ -218,42 +197,51 @@ namespace List
         {
             SinglyLinkedList<T> newList = new SinglyLinkedList<T>();
 
-            Node<T> current = head;
+            Node<T> currentOld = head;
+            Node<T> currentNew = new Node<T>();
 
-            while (current != null)
+            while (currentOld != null)
             {
-                newList.Add(current.Data);
+                if (newList.head == null)
+                {
+                    newList.head = new Node<T>(currentOld.Data);
 
-                current = current.Next;
+                    currentNew = newList.head;
+                }
+                else
+                {
+                    currentNew.Next = new Node<T>();
+                    currentNew = currentNew.Next;
+                    currentNew.Data = currentOld.Data;
+                }
+
+                currentOld = currentOld.Next;
+
+                newList.Count++;
             }
 
             return newList;
         }
 
-        private void Add(T data)
+        public override string ToString()
         {
+            StringBuilder stringBuilder = new StringBuilder();
+
             Node<T> current = head;
 
-            if (current == null)
+            while (current != null)
             {
-                current = new Node<T>(data);
+                stringBuilder.Append(current.Data);
 
-                head = current;
+                if (current.Next != null)
+                {
+                    stringBuilder.Append(", ");
+                }
 
-                count++;
-
-                return;
-            }
-
-            while (current.Next != null)
-            {
                 current = current.Next;
             }
 
-            Node<T> nodeToAdd = new Node<T>(data);
-            current.Next = nodeToAdd;
-
-            count++;
+            return stringBuilder.ToString();
         }
     }
 }

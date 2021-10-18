@@ -13,11 +13,13 @@ namespace List
                 list.AddFirst(i);
             }
 
-            Console.WriteLine($"Размер листа: {list.GetLength()} элементов");
+            Console.WriteLine("Исходный лист: " + list);
+
+            Console.WriteLine($"Размер листа: {list.Count} элементов");
 
             try
             {
-                Console.WriteLine($"Значение, хранимое в первом элементе: {list.GetFirstElement()}");
+                Console.WriteLine($"Значение, хранимое в первом элементе: {list.GetFirst()}");
             }
             catch (NullReferenceException)
             {
@@ -26,7 +28,7 @@ namespace List
 
             try
             {
-                Console.WriteLine($"Значение, хранимое в элементе под индексом {3}: { list.GetElement(3)}");
+                Console.WriteLine($"Значение, хранимое в элементе под индексом {3}: { list.GetData(3)}");
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -35,7 +37,7 @@ namespace List
 
             try
             {
-                Console.WriteLine($"Элемент {list.ChangeElement(3, 0)} был изменен на {0} под индексом {3}");
+                Console.WriteLine($"Элемент {list.SetData(3, 0)} был изменен на {0} под индексом {3}: " + list);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -44,20 +46,18 @@ namespace List
 
             try
             {
-                Console.WriteLine($"Элемент {list.Remove(4)} под индексом {4} был удален");
+                Console.WriteLine($"Элемент {list.RemoveByIndex(4)} под индексом {4} был удален: " + list);
             }
             catch (ArgumentOutOfRangeException)
             {
                 Console.WriteLine("Невозможно удалить элемент. Индекс находится вне длины списка");
             }
 
-            Node<int> nodeToInsert = new Node<int>(20);
-
             try
             {
-                list.Insert(nodeToInsert, 2);
+                list.Insert(2, 20);
 
-                Console.WriteLine($"Узел со значением {20} был вставлен под индексом {2}");
+                Console.WriteLine($"Узел со значением {20} был вставлен под индексом {2}: " + list);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -66,13 +66,13 @@ namespace List
 
             try
             {
-                if (list.RemoveItem(20))
+                if (list.RemoveData(20))
                 {
-                    Console.WriteLine($"Элемент удален {20}");
+                    Console.WriteLine($"Элемент удален {20}: " + list);
                 }
                 else
                 {
-                    Console.WriteLine("Элеменнт не был найден");
+                    Console.WriteLine("Элемент не был найден");
                 }
             }
             catch (NullReferenceException)
@@ -81,8 +81,11 @@ namespace List
             }
 
             list.Reverse();
+            Console.WriteLine("Список после инвертирования: " + list);
 
-            SinglyLinkedList<int> copyList = list.Copy();
+            SinglyLinkedList<int> copiedList = list.Copy();
+
+            Console.WriteLine("Скопированный список: " + copiedList);
 
             Console.ReadKey();
         }
