@@ -3,20 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ListTask
+namespace ArrayListTask
 {
     class MyList<T> : IList<T>
     {
         private T[] items;
+
         private int modCount;
+
         public int Count { get; private set; }
+
+        private readonly int defaultCapacity = 10;
+
         public int Capacity
         {
             get
             {
                 return items.Length;
             }
-            set
+            private set
             {
                 Array.Resize(ref items, value);
             }
@@ -24,11 +29,16 @@ namespace ListTask
 
         public MyList()
         {
-            items = new T[10];
+            items = new T[defaultCapacity];
         }
 
         public MyList(int capacity)
         {
+            if (capacity < 1)
+            {
+                throw new ArgumentException($"Невозможно создать список ёмкостью меньше 1: {capacity}", nameof(capacity));
+            }
+
             items = new T[capacity];
         }
 
@@ -36,54 +46,50 @@ namespace ListTask
         {
             get
             {
-                if (index < 0 || index >= Count - 1)
-                {
-                    throw new ArgumentOutOfRangeException($"Индекс должен быть больше 0 и меньше {Count - 1}, {nameof(index)} = {index}");
-                }
+                CheckIndex(index);
 
                 return items[index];
             }
             set
             {
-                if (index < 0 || index >= Count)
-                {
-                    throw new ArgumentOutOfRangeException($"Индекс должен быть больше 0 и меньше {Count - 1}, {nameof(index)} = {index}");
-                }
+                CheckIndex(index);
 
                 items[index] = value;
             }
         }
 
-        public void Add(T element)
+        public void Add(T item)
         {
-            Insert(Count, element);
+            Insert(Count, item);
         }
 
         private void IncreaseCapacity()
         {
-            Array.Resize(ref items, (items.Length + 1) * 2);
+            if (items.Length == 0)
+            {
+                Array.Resize(ref items, defaultCapacity);
+            }
+
+            Array.Resize(ref items, (items.Length) * 2);
         }
 
         public void RemoveAt(int index)
         {
-            if (index > Count - 1 || index < 0)
-            {
-                throw new IndexOutOfRangeException($"Индекс ({index}) должен быть больше 0 и меньше {Count - 1}, {nameof(index)} = {index}");
-            }
+            CheckIndex(index);
 
             Array.Copy(items, index + 1, items, index, Count - index - 1);
 
-            items[Count - 1] = default(T);
+            items[Count - 1] = default;
 
             --Count;
             ++modCount;
         }
 
-        public void Insert(int index, T element)
+        public void Insert(int index, T item)
         {
-            if (index > Count || index < 0)
+            if (index < 0 || index > Count)
             {
-                throw new IndexOutOfRangeException($"Индекс ({index}) должен быть больше 0 и меньше {Count - 1}, {nameof(index)} = {index}");
+                throw new ArgumentOutOfRangeException($"Индекс должен быть не отрецательным и не превышать {Count}: {index}", nameof(index));
             }
 
             if (Count >= items.Length)
@@ -93,7 +99,7 @@ namespace ListTask
 
             Array.Copy(items, index, items, index + 1, Count - index);
 
-            items[index] = element;
+            items[index] = item;
 
             ++Count;
             ++modCount;
@@ -103,7 +109,7 @@ namespace ListTask
         {
             for (int i = 0; i < Count; i++)
             {
-                items[i] = default(T);
+                items[i] = default;
             }
 
             Count = 0;
@@ -111,35 +117,26 @@ namespace ListTask
             modCount++;
         }
 
-        public bool Contains(T element)
+        public bool Contains(T item)
         {
-            if (IndexOf(element) == -1)
-            {
-                return false;
-            }
-
-            return true;
+            return IndexOf(item) == -1;
         }
 
         public void CopyTo(T[] array, int index)
         {
             if (Count > array.Length - index)
             {
-                throw new IndexOutOfRangeException($"Размер массива {nameof(array.Length)} = {array.Length} должен быть больше {Count + index}");
+                throw new ArgumentException($"Размер массива должен быть больше {Count + index} : {array.Length}", nameof(array.Length));
             }
 
             Array.Copy(items, 0, array, index, Count);
         }
 
-        public int IndexOf(T element)
+        public int IndexOf(T item)
         {
             for (int i = 0; i < Count; i++)
             {
-                if (items[i] == null && element == null)
-                {
-                    return i;
-                }
-                else if (items[i].Equals(element))
+                if (Equals(items[i], item))
                 {
                     return i;
                 }
@@ -148,21 +145,29 @@ namespace ListTask
             return -1;
         }
 
-        public bool Remove(T element)
+        public bool Remove(T item)
         {
-            int oldCount = Count;
+            int index = IndexOf(item);
 
-            RemoveAt(IndexOf(element));
-
-            if (oldCount == Count)
+            if (index == -1)
             {
                 return false;
             }
 
+            RemoveAt(index);
+
             return true;
         }
 
-        public void TrimExpress()
+        private void CheckIndex(int index)
+        {
+            if (index < 0 || index >= Count)
+            {
+                throw new ArgumentOutOfRangeException($"Индекс должен быть не отрецательным и меньше {Count}: {index}", nameof(index));
+            }
+        }
+
+        public void TrimExcess()
         {
             Capacity = Count;
         }
@@ -176,13 +181,13 @@ namespace ListTask
 
         public IEnumerator<T> GetEnumerator()
         {
-            int mods = modCount;
+            int initialModCounter = modCount;
 
             for (int i = 0; i < Count; i++)
             {
-                if (mods != modCount)
+                if (initialModCounter != modCount)
                 {
-                    throw new InvalidOperationException("Коллекция была изменена во вресмя обхода");
+                    throw new InvalidOperationException("Коллекция была изменена во время обхода");
                 }
 
                 yield return items[i];
@@ -193,15 +198,18 @@ namespace ListTask
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            for (int i = 0; i < Count; i++)
+            stringBuilder.Append('[');
+
+            for (int i = 0; i < Count - 1; i++)
             {
                 stringBuilder.Append(items[i]);
 
-                if (i+1!=Count)
-                {
-                    stringBuilder.Append(", ");
-                }
+                stringBuilder.Append(", ");
             }
+
+            stringBuilder.Append(items[Count - 1]);
+
+            stringBuilder.Append(']');
 
             return stringBuilder.ToString();
         }

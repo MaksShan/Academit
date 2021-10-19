@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ListTask
+namespace ArrayListTask
 {
     class Program
     {
@@ -8,12 +8,14 @@ namespace ListTask
         {
             MyList<int> list = new MyList<int> { 1, 2, 3, 4, 5 };
 
+            Console.WriteLine($"Исходный список: {list}");
+
             Console.WriteLine($"Под индексом {3} находится число: {list[3]}");
 
             list[3] = 0;
-            Console.WriteLine($"Заменив число под индексом {3} на {0}, получим: {list[3]}");
+            Console.WriteLine($"Заменив число под индексом {3} на {0}, получим: {list}");
 
-            Console.WriteLine($"Приведенный список состоит из: {list.Count} чисел");
+            Console.WriteLine($"Приведенный список состоит из: {list.Count} элементов");
 
             list.Add(5);
             Console.WriteLine($"Добавив к списку число {5}, получим список: {list}");
@@ -27,25 +29,27 @@ namespace ListTask
             list.Insert(0, 0);
             Console.WriteLine($"После вставки в список числа {0} по  индексу {0}, получим список: {list}");
 
-            if (list.Contains(8))
+            int numberToCheck = 8;
+
+            if (list.Contains(numberToCheck))
             {
-                Console.WriteLine($"Список содержит число {8}");
+                Console.WriteLine($"Список содержит число {numberToCheck}");
             }
             else
             {
-                Console.WriteLine($"Список не содержит число {8}");
+                Console.WriteLine($"Список не содержит число {numberToCheck}");
             }
 
             Console.WriteLine($"Индекс числа {2}: {list.IndexOf(2)}");
 
             Console.WriteLine($"Ёмкость листа и число элементов до обрезания емкости: {nameof(list.Capacity)} = {list.Capacity} {nameof(list.Count)} = {list.Count}");
-            list.TrimExpress();
+            list.TrimExcess();
             Console.WriteLine($"Ёмкость листа и число элементов после обрезания емкости: {nameof(list.Capacity)} = {list.Capacity} {nameof(list.Count)} = {list.Count}");
 
             int[] array = new int[10];
 
             list.CopyTo(array, 2);
-            Console.WriteLine($"Массив с скопированными числами из листа, начиная с индекса {2}: {string.Join(", ", array)}");
+            Console.WriteLine($"Массив с скопированными числами из листа, начиная с индекса {2}: [{string.Join(", ", array)}]");
 
             Console.ReadKey();
         }
