@@ -36,26 +36,15 @@ namespace HashTableTask
             }
             else
             {
-                Console.WriteLine("Не удалось удалить жэлемент");
+                Console.WriteLine("Не удалось удалить элемент");
             }
 
-            string[] countries = new string[20];
+            string[] countries = new string[300];
 
-            table.CopyTo(countries, 10);
+            table.CopyTo(countries, 0);
 
-            Console.Write($"В таблице под индексом {10} хранятся следующие элементы: ");
-
-            for (int i = 0; i < countries.Length && countries[i] != null; i++)
-            {
-                Console.Write(countries[i]);
-
-                if (countries[i + 1] == null)
-                {
-                    break;
-                }
-
-                Console.Write(", ");
-            }
+            Console.WriteLine("Содержимое таблицы: ");
+            Console.WriteLine(table);
 
             table.Clear();
 
