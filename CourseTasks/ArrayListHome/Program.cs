@@ -51,7 +51,11 @@ namespace ArrayListHome
 
                 return lines;
             }
-            catch (IOException) // покрывает и FileNotFoundException
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("Файл не найден!");
+            }
+            catch (IOException)
             {
                 Console.WriteLine("Не удалось открыть файл!");
             }
