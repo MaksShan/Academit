@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lambda
+﻿namespace Lambda
 {
     class Person
     {
         public string Name { get; set; }
+
         public int Age { get; set; }
 
         public Person(string name, int age)
@@ -19,7 +14,7 @@ namespace Lambda
 
         public override string ToString()
         {
-            return $"name = {Name}, age = {Age}";
+            return $"имя = {Name}, возраст = {Age}";
         }
     }
 }
